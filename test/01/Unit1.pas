@@ -3,16 +3,12 @@ unit Unit1;
 interface
 
 uses
-  Winapi.Windows, Winapi.Messages, System.SysUtils, System.Variants, System.Classes, Vcl.Graphics, Vcl.Controls, Vcl.Forms, Vcl.Dialogs,
-  Vcl.StdCtrls, db.OpenCV;
+  Winapi.Windows, Winapi.Messages, System.SysUtils, System.Variants, System.Classes, Vcl.Graphics, Vcl.Controls, Vcl.Forms, Vcl.Dialogs, Vcl.StdCtrls;
 
 type
   TForm1 = class(TForm)
+    mmo1: TMemo;
     procedure FormShow(Sender: TObject);
-  private
-    // FMatClassObj: Pointer;
-  public
-    { Public declarations }
   end;
 
 var
@@ -22,21 +18,19 @@ implementation
 
 {$R *.dfm}
 
+uses db.OpenCV;
+
 procedure TForm1.FormShow(Sender: TObject);
 var
-  TTT: PVCString;
-  PPP: Pointer;
+  ttt: TOpenCV;
 begin
-  TTT := VCString('C:\Windows\Web\Wallpaper\Windows\img0.jpg');
+  ttt := TOpenCV.Create;
   try
-    PPP := imread(TTT, -1);
-    if PPP <> nil then
-    begin
-
-    end;
+    mmo1.Lines.Add(ttt.BuildInfo);                                                      // OpenCV ±‡“Î∞Ê±æ∫≈
+    ttt.imread('C:\Windows\Web\Wallpaper\Windows\img0.jpg', Integer(IMREAD_GRAYSCALE)); // ∂¡»°Õº∆¨
+    ttt.imshow;                                                                         // œ‘ æΩÁ√Ê
   finally
-    FreeMem(TTT^.strMem);
-    FreeMem(TTT);
+    ttt.free;
   end;
 end;
 
