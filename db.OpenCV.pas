@@ -123,7 +123,7 @@ type
 
 implementation
 
-{ Delphi String 转换为 C++ String }
+{ Delphi String 转换为 C++ std::string }
 function VCString(const strFileName: string): PVCString;
 var
   vcs: AnsiString;
