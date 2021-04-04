@@ -95,11 +95,11 @@ type
     imageId: Pointer;                       // "           "
     tileInfo: P_IplTileInfo;                // "           "
     imageSize: int;                         // Image data size in bytes   (==image->height*image->widthStep in case of interleaved data)
-    imageData: PAnsiChar;                   // Pointer to aligned image data.
+    imageData: Pointer;                     // Pointer to aligned image data.
     widthStep: int;                         // Size of aligned image row in bytes.
     BorderMode: array [0 .. 3] of int;      // int  [4];     // Ignored by OpenCV.
     BorderConst: array [0 .. 3] of int;     // int  [4];    // Ditto.
-    imageDataOrigin: PAnsiChar;             // Pointer to very origin of image data
+    imageDataOrigin: Pointer;               // Pointer to very origin of image data
   end;
 
 type
