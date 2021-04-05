@@ -220,7 +220,7 @@ end;
 { C++ œ‘ æ }
 procedure TOpenCV.imshowCpp(const strTitle: string);
 var
-  cvimshow          : procedure(const TitleName: PVCString; mat: PcvArr); stdcall;
+  cvimshow          : procedure(const TitleName: PVCString; mat: TInputArray); stdcall;
   cvInputArrayCreate: function(mat: TMat): TInputArray; stdcall;
   pvcs              : PVCString;
   pIA               : TInputArray;
