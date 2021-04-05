@@ -166,15 +166,15 @@ begin
     Exit;
 
   pVer := cvBuildInfo;
-  if pVer <> nil then
-  begin
-    GetMem(chrVer, pVer^.len);
-    try
-      CopyMemory(@chrVer[0], pVer^.strMem, pVer^.len);
-      Result := StringReplace(String(AnsiString(chrVer)), #$A, #$D#$A, [rfReplaceAll]);
-    finally
-      FreeMem(chrVer);
-    end;
+  if pVer = nil then
+    Exit;
+
+  GetMem(chrVer, pVer^.len);
+  try
+    CopyMemory(@chrVer[0], pVer^.strMem, pVer^.len);
+    Result := StringReplace(String(AnsiString(chrVer)), #$A, #$D#$A, [rfReplaceAll]);
+  finally
+    FreeMem(chrVer);
   end;
 end;
 
