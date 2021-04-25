@@ -23,11 +23,25 @@ type
   { C++ std::string 类 }
   PVCString = ^TVCString;
 
+  {
+    std::string 内存结构长度 24 字节；
+    当字符串长度大于等于16字节时，才可以使用本结构。
+    如果字符串小于16字节，是不能使用此结构的。需使用 TVCString_Small 结构。
+    也可以将字符串补齐16字节，再使用本结构。
+    本代码使用后一种方法。方便统一管理。详见 VCString 函数。
+  }
   TVCString = record
     strMem: PDWORD;    // 字符串指针
     R1, R2, R3: DWORD; // 未知
     len: DWORD;        // 字符串长度
     R4: DWORD;         // 定值 = $0000002F
+  end;
+
+  { 字符串长度小于16字节时，std::string 内存结构 }
+  TVCString_Small = record
+    strMem: array [0 .. 15] of AnsiChar; // 字符串
+    len: DWORD;                          // 字符串长度
+    R4: DWORD;                           // 定值 = $0000002F
   end;
 
   { opencv cvArr class 类 }
@@ -128,12 +142,14 @@ function VCString(const strFileName: string): PVCString;
 var
   vcs: AnsiString;
 begin
-  vcs            := AnsiString(strFileName);        // 宽字节转换为短字节
-  Result         := AllocMem(SizeOf(TVCString));    // 分配内存
-  Result^.strMem := AllocMem(Length(vcs));          // 分配字符串内存
-  CopyMemory(Result^.strMem, @vcs[1], Length(vcs)); // 复制字符串
-  Result^.len := Length(vcs);                       // 字符串长度
-  Result^.R4  := $0000002F;                         // 定值
+  vcs := AnsiString(strFileName);                               // 宽字节转换为短字节
+  if Length(vcs) < 16 then                                      // std::String 类，字符串长度大于等于16字节和小于16字节，内存结构是不一样的
+    vcs          := AnsiString(Format('%-16s', [string(vcs)])); // 这里将长度不足16字节的，补齐为16字节。方便统一管理。
+  Result         := AllocMem(SizeOf(TVCString));                // 分配内存
+  Result^.strMem := AllocMem(Length(vcs));                      // 分配字符串内存
+  CopyMemory(Result^.strMem, @vcs[1], Length(vcs));             // 复制字符串
+  Result^.len := Length(vcs);                                   // 字符串长度
+  Result^.R4  := $0000002F;                                     // 定值
 end;
 
 { TOpenCV }
